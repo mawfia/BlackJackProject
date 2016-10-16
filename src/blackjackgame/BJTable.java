@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class BJTable {
 	
-	static Dealer dealer = new Dealer();
+	static Dealer dealer;
 	static Deck deck;
 	
 	public static void main(String[] args) {
@@ -13,7 +13,7 @@ public class BJTable {
 	
 	static void BlackJackMenu(Player player){
 		
-		System.out.println("\nPlease select from the menu (1-4): ");
+		System.out.println("Please select from the menu (1-4): ");
 		System.out.println("1)  Hit");
 		System.out.println("2)  Stand");
 		System.out.println("3)  View Hand ");
@@ -43,16 +43,15 @@ public class BJTable {
 		evaluateCards(player, 1);
 	}
 	
-	static int dealCards(Player player, int recipient){
+	static void dealCards(Player player, int recipient){
 		
-		if(recipient == 1) { 
+		if(recipient >= 1) { 
 			player.takeCard(deck.drawCard());
 			player.displayHand();
 			evaluateCards(player, recipient);
 		}
 		else if (recipient == 0) { 
 			
-			// Input method for decision by dealer to take another card
 			if(dealer.takeCard(deck.drawCard())) {
 				System.out.println("Dealer takes a card.");
 				dealCards(player, 0);
@@ -60,20 +59,23 @@ public class BJTable {
 			else evaluateCards(player, -1);
 		}
 		
-		return 0;
 	}
 	
 	static void evaluateCards(Player player, int recipient){
-				
-		if( player.getValueOfHand()*recipient*recipient > 21){
+		
+		if((player.hand.blackjack == 0 || dealer.hand.blackjack == 0) && recipient > 0) /*System.out.print("Blackjack! ");*/  evaluateCards(player, -1);
+		else if( player.getValueOfHand()*recipient*recipient > 21){
 			System.out.println("Game over, player loses with: " + player.hand.cards);
 		}
 		else if( dealer.getValueOfHand()*recipient*recipient > 21) {
 			System.out.println("Game over, dealer loses with: " + dealer.hand.cards);
 		}
-		else if (recipient == -1 && (dealer.getValueOfHand() > player.getValueOfHand())) System.out.println("Game over, dealer wins with: " + dealer.hand.cards);
-		else if (recipient == -1 && (dealer.getValueOfHand() < player.getValueOfHand())) System.out.println("Game over, player wins with: " + player.hand.cards);
-		else if (recipient == -1 && (dealer.getValueOfHand() == player.getValueOfHand())) System.out.println("Game over, player and dealer tie. ");
+		else if (recipient == -1 && (dealer.getValueOfHand()*player.hand.blackjack > player.getValueOfHand()*dealer.hand.blackjack)) 
+			System.out.println("Game over, dealer wins with: " + dealer.hand.cards);
+		else if (recipient == -1 && (dealer.getValueOfHand()*player.hand.blackjack < player.getValueOfHand()*dealer.hand.blackjack)) 
+			System.out.println("Game over, player wins with: " + player.hand.cards);
+		else if (recipient == -1 && (dealer.getValueOfHand()*player.hand.blackjack == player.getValueOfHand()*dealer.hand.blackjack)) 
+			System.out.println("Game over, player and dealer tie. ");
 		else BlackJackMenu(player);
 	
 	}

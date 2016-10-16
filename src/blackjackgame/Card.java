@@ -13,15 +13,15 @@ public class Card {
 	}
 	
 	public Card(Rank rank, Suit suit) {
-		setSuit(suit);
-		setRank(rank);
+		this.setSuit(suit);
+		this.setRank(rank);
 	}
 
 	public int getValue() {
 		return value;
 	}
 
-	void setValue(int value) {
+	public void setValue(int value) {
 		this.value = value;
 	}
 
@@ -56,9 +56,24 @@ public class Card {
 		default: break;
 		}
 	}
+	 
+	boolean isBlackJackCard(){
+		
+		switch(this.rank){
+		case ACE: case KING: case QUEEN: case JACK: return true;
+		default: return false;
+		}
+	}
+	
+	boolean isSplit(Card card1, Card card2){
+		if(card1.getValue() == card2.getValue()) return true;
+		else return false;
+	}
 
 	@Override
 	public String toString() {
-		return  "Card [value=" + value + ", suit=" + suit + ", rank=" + rank + "]";
+		return  rank + " of " + suit;
+//				"Card [value=" + value + ", suit=" + suit + ", rank=" + rank + "]";
 	}
+
 }
