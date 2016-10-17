@@ -15,7 +15,6 @@ public class Player {
 	}
 	
 	public void displayHand(){
-		//this.hand.displayHand();
 		System.out.println("Player's hand:");
 		for (int i =0; i < hand.cardNumber(); i++) hand.displayCard(i);
 		System.out.println();
@@ -24,6 +23,14 @@ public class Player {
 	public void takeCard(Card card){
 		this.hand.takeCard(card);
 		
+	}
+	
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	public String getName(){
+		return this.name;
 	}
 	
 	public int getValueOfHand(){
