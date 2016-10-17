@@ -25,7 +25,7 @@ public class BJTable {
 		case "1": System.out.println("Player takes another card."); player.hand = dealCards(player, 1); break;
 		case "2": System.out.println("Player holds."); if(player.hand.split < 0) break; else { player.hand = dealCards(player, 0); break; }
 		case "3": System.out.println("Player views hand."); player.displayHand(); player.hand = BlackJackMenu(player); break;
-		case "4": System.out.println("Player surrenders."); player.hand.gameResults = 6; if(player.hand.split ==1) displayResults(player); break;  
+		case "4": System.out.println("Player surrenders."); player.hand.gameResults = 6; if(player.hand.split == 1) displayResults(player); break;  
 		default:  System.out.println("Invalid selection."); player.hand = BlackJackMenu(player); break;
 		}
 		
@@ -78,6 +78,7 @@ public class BJTable {
 		System.out.println("***" + player.getName() + " has a split hand!***\n");
 		Player splayer = new Player();
 		
+		splayer.setName(player.getName());
 		System.out.println("Split 1 Play");
 		splayer.hand = split1;
 		splayer.hand.split = -player.hand.split*(1-(2*split1.split));  // Check to see if there is another split for the first hand
@@ -91,14 +92,14 @@ public class BJTable {
 		split2 = evaluateCards(splayer, 1);
 		
 		// Dealers turn after both splits are done with drawing cards
-		// Determine if win or lose on split's first hand
+		// Determine if win or loss on split's first hand
 		splayer.hand = split1;
-		//splayer.hand.split = -1; // Resave flag indicating this is the dealer's turn on a first hand for a split
+		splayer.hand.split = -1; // Resave flag indicating this is the dealer's turn on a first hand for a split
 		split1 = dealCards(splayer, 0);
 		
-		// Determine if win or lose on split's second hand
+		// Determine if win or loss on split's second hand
 		splayer.hand = split2;
-		//splayer.hand.split = -1; // Resave flag indicating this is the dealer's turn on a second hand for a split
+		splayer.hand.split = -1; // Resave flag indicating this is the dealer's turn on a second hand for a split
 		split2 = dealCards(splayer, 0);
 		
 		// Display results of split's first hand
@@ -110,7 +111,7 @@ public class BJTable {
 		// Display results of split's second hand
 		player.hand = split2;
 		player.hand.split = 1;
-		player.setName(player.getName() + "'s second hand of split results.");
+		player.setName(splayer.getName() + "'s second hand of split results.");
 		displayResults(player);
 		
 		return player.hand;
@@ -164,7 +165,7 @@ public class BJTable {
 			}
 		}
 		
-		if(player.hand.split == 1){ //Results for split game results
+		if(player.hand.split == 1){ //Results for split games
 			System.out.println(player.getName());
 			System.out.println("_____________________________________");
 			switch(player.hand.gameResults){
